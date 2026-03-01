@@ -1,36 +1,153 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UrbanResist – Hyper-local Disaster Resilience Map
 
-## Getting Started
+UrbanResist is a web application that helps communities report and monitor urban hazards in real time.
+Residents can report issues like flooded roads, fallen trees, or downed power lines, allowing neighbors and city planners to respond faster and improve safety.
 
-First, run the development server:
+The platform provides an interactive map, hazard reporting, and a dashboard to monitor city safety conditions.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Live Link
+https://urban-disaster-management.netlify.app
+
+## Features
+
+### Interactive Hazard Map
+
+* Displays hazard locations using **Leaflet maps**
+* Each hazard appears as a clickable marker
+* Shows hazard title and description in a popup
+
+### Community Hazard Reporting
+
+Users can report hazards by providing:
+
+* Hazard title
+* Description
+* Latitude
+* Longitude
+
+### Dashboard
+
+* Displays total reported hazards
+* Shows city safety statistics
+* Helps monitor disaster situations quickly
+
+### Simple Navigation
+
+* Map view
+* Hazard reporting page
+* Dashboard overview
+
+---
+
+## Tech Stack
+
+* **Next.js (App Router)**
+* **React**
+* **Tailwind CSS**
+* **Leaflet / React-Leaflet** for maps
+* **UUID** for hazard IDs
+
+---
+
+## Project Structure
+
+```
+app
+ ├ dashboard
+ │   └ page.tsx
+ ├ report
+ │   └ page.tsx
+ ├ api
+ │   └ hazards
+ │       └ route.ts
+ ├ page.tsx
+
+components
+ ├ MapView.tsx
+ ├ ReportForm.tsx
+ ├ HazardCard.tsx
+ └ Navbar.tsx
+
+lib
+ └ data.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Clone the repository
 
-## Learn More
+```
+git clone https://github.com/ChandaniSahu/Urban-Resist.git
+```
 
-To learn more about Next.js, take a look at the following resources:
+Move into the project directory
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+cd urbanresist
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Install dependencies
 
-## Deploy on Vercel
+```
+npm install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Start the development server
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+npm run dev
+```
+
+Open in browser
+
+```
+http://localhost:3000
+```
+
+---
+
+## How It Works
+
+1. Users report hazards through the **Report Hazard** page.
+2. The data is sent to the **API route** (`/api/hazards`).
+3. Hazards are stored temporarily in `lib/data.ts`.
+4. The map fetches hazards and displays them as markers.
+
+---
+
+## Example Hazard Data
+
+```
+Title: Flooded Road
+Description: Heavy rainfall has flooded the street
+Latitude: 22.3645
+Longitude: 82.7541
+```
+
+---
+
+## Limitations
+
+Currently hazards are stored in **memory**, so data resets when the server restarts.
+
+For production we will definitely integrate:
+
+* MongoDB
+* Cloudinary for image uploads
+* Real-time updates using WebSockets
+
+---
+
+## Future Improvements
+
+* Image upload for hazards
+* Automatic GPS location detection
+* Real-time alerts
+* Authentication system
+* Admin management dashboard
+* Mobile responsive improvements
+
