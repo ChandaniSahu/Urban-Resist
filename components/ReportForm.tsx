@@ -10,31 +10,62 @@ export default function ReportForm() {
 
   const [locating, setLocating] = useState(true);
   const [locationError, setLocationError] = useState("");
+  const [permissionDenied, setPermissionDenied] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
+  const getLocation = () => {
     if (!navigator.geolocation) {
       setLocationError("Geolocation not supported");
       setLocating(false);
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
+    setLocating(true);
+    setLocationError("");
+    setPermissionDenied(false);
+
+    let watchId: number;
+
+    watchId = navigator.geolocation.watchPosition(
       (position) => {
+        console.log("GPS update:", position);
+
         setLat(position.coords.latitude);
         setLng(position.coords.longitude);
+
+        // stop watching once we get a good fix
+        navigator.geolocation.clearWatch(watchId);
+
         setLocating(false);
       },
-      () => {
-        setLocationError(
-          "Unable to fetch location. Please allow location access.",
-        );
+      (error) => {
+        console.log("Geolocation error:", error);
+
+        if (error.code === error.PERMISSION_DENIED) {
+          setLocationError("Location permission denied.");
+          setPermissionDenied(true);
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          setLocationError("Location unavailable.");
+        } else if (error.code === error.TIMEOUT) {
+          setLocationError("Location request timed out.");
+        } else {
+          setLocationError(
+            "Unable to fetch location. Please allow location access."
+          );
+        }
+
         setLocating(false);
       },
       {
         enableHighAccuracy: true,
-      },
+        timeout: 15000,
+        maximumAge: 0,
+      }
     );
+  };
+
+  useEffect(() => {
+    getLocation();
   }, []);
 
   const submit = async (e: any) => {
@@ -89,18 +120,28 @@ export default function ReportForm() {
       )}
 
       {!locating && lat && lng && (
-        <div className="text-green-600 text-sm">Location captured</div>
+        <div className="text-green-600 text-sm">Location captured {lat},{lng}</div>
       )}
 
       {locationError && (
         <div className="text-red-600 text-sm">{locationError}</div>
       )}
 
+      {permissionDenied && (
+        <button
+          type="button"
+          onClick={getLocation}
+          className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
+        >
+          Allow Location Access
+        </button>
+      )}
+
       <div className="text-xs text-gray-500">
         Note: Location is most accurate on mobile devices using GPS. On desktop
         or laptop, it may use ISP/network location which can be less precise.
       </div>
-      
+
       <button
         disabled={locating || submitting}
         className="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
