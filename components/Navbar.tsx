@@ -20,7 +20,7 @@ export default function Navbar() {
           <div className="w-8 h-8 bg-red-500 rounded-md flex items-center justify-center text-white font-bold">
             U
           </div>
-          <span className="text-xl font-semibold text-gray-800">
+          <span className="hidden sm:block text-xl font-semibold text-gray-800">
             UrbanResist
           </span>
         </Link>
